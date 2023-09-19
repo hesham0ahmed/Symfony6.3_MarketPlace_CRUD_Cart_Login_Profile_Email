@@ -1,0 +1,9 @@
+{# 
+                <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
+                    {% set totalQuantity = 0 %}
+                    {% for cartItem in cart %}
+                        {% set totalQuantity = totalQuantity + cartItem.quantity %}
+                    {% endfor %}
+                    {{ totalQuantity }}
+                </span>
+         #}

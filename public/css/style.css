@@ -1,0 +1,55 @@
+.vich-image {
+  height: 50px;
+}
+
+#product_imageFile_delete {
+  display: none;
+}
+
+
+
+label {
+  font-weight: 600;
+  /* color: red; */
+}
+
+.delete-checkbox {
+  /* height: 10px; */
+  margin: 15px;
+  width: 14px;
+  height: 14px;
+
+}
+
+.status-open {
+  color: red;
+}
+
+.status-done {
+  color: blue;
+}
+
+.status-pending {
+  color: orange;
+}
+
+.status-sold {
+  color: red;
+}
+
+.status-reserved {
+  color: orange;
+}
+
+.bgImage {
+  background-image: url('../pictures/bg.jpg');
+  background-size: cover;
+  color: whitesmoke;
+  /* filter: blur(2px); */
+}
+
+.ober1,
+.ober2 {
+  text-shadow: 2px 2px 2px black, 3px 3px 3px black, 3px 3px 4px black;
+
+}

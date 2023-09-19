@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Send a Email{% endblock %}
+
+{% block body %}
+
+
+
+
+{% if is_granted("ROLE_ADMIN") %}
+
+        <div class="container my-5">
+{# 
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 d-flex justify-content-center"> #}
+            
+                <div class="col">
+                    <div class="card shadow-sm">
+
+                          <h1 class="text-center my-3">Send an Email !</h1>
+                        <div class="card-body">
+
+                         
+
+                            {{ form_start(form) }}
+                    
+                            <div>
+                                {{ form_label(form.from) }}
+                                {{ form_widget(form.from) }}
+                            </div>
+                    
+                            <div>
+                                {{ form_label(form.to) }}
+                                {{ form_widget(form.to) }}
+                            </div>
+                    
+                            <div>
+                                {{ form_label(form.subject) }}
+                                {{ form_widget(form.subject) }}
+                            </div>
+                    
+                            <div>
+                                {{ form_label(form.text) }}
+                                {{ form_widget(form.text) }}
+                            </div>
+                    
+                            <div>
+                                {{ form_widget(form.send) }}
+                            </div>
+                    
+                            {{ form_end(form) }}
+                        </div>
+                        </div>
+{#               
+            </div> #}
+        </div>
+    </div>
+</div>
+{% elseif is_granted("ROLE_USER") %}
+<div class="container my-5">
+    {# 
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 d-flex justify-content-center"> #}
+                
+                    <div class="col">
+                        <div class="card shadow-sm">
+    
+                              <h1 class="text-center my-3">Send an Email !</h1>
+                            <div class="card-body">
+    
+                             
+    
+                                {{ form_start(form) }}
+                        
+                                <div>
+                                    {{ form_label(form.from) }}
+                                    {{ form_widget(form.from) }}
+                                </div>
+                        
+                                <div>
+                                    {{ form_label(form.to) }}
+                                    {{ form_widget(form.to) }}
+                                </div>
+                        
+                                <div>
+                                    {{ form_label(form.subject) }}
+                                    {{ form_widget(form.subject) }}
+                                </div>
+                        
+                                <div>
+                                    {{ form_label(form.text) }}
+                                    {{ form_widget(form.text) }}
+                                </div>
+                        
+                                <div>
+                                    {{ form_widget(form.send) }}
+                                </div>
+                        
+                                {{ form_end(form) }}
+                            </div>
+                            </div>
+    {#               
+                </div> #}
+            </div>
+        </div>
+    </div>
+{% else %}
+  <div class="container text-center">
+    <h3 class="my-5">You are not Logged in !</h3>
+  </div>
+{% endif %}
+
+
+
+
+{% endblock %}

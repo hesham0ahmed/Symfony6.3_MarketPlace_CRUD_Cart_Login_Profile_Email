@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhoneFactory</title>
+      {# BOOTSTRAP #}
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  {# BOOTSTRAP #}
+  
+</head>
+
+
+{% block title %}{% endblock %}
+
+  
+
+{% block body %}
+
+<body class="d-flex h-100 text-bg-dark text-black">
+      
+    {{ form_errors(registrationForm) }}
+ 
+  
+      
+   
+    
+    
+    
+    
+
+    
+  
+  
+    
+  
+  
+  
+    <div class="b-example-divider mb-4"></div>
+
+    <div class="container col-xl-10 col-xxl-8 px-4 py-1 w-100">
+      <div class="row align-items-center g-lg-5 py-5">
+       
+        <div class="col-md-10 mx-auto col-lg-5">
+          <form method="post" class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+            <div class="form-floating fw-bold">
+                {{ form_start(registrationForm) }}
+                <div class="my-2">{{ form_row(registrationForm.fname) }}</div>
+                <div class="my-2"> {{ form_row(registrationForm.lname) }}</div>
+                    <div class="my-2"> {{ form_row(registrationForm.email) }}</div>
+            </div>
+            <div class="form-floating mb-3 fw-bold">
+                {{ form_row(registrationForm.plainPassword, {
+                    label: 'Password'
+                    }) }}
+              
+            </div>
+            {{ form_row(registrationForm.agreeTerms) }}
+            <div class="checkbox mb-3">
+              
+             
+            </div>
+            <button type="submit" class="btn btn-warning my-3">Register</button>
+        
+            {# <p><small class="text-body-secondary">By clicking Register, you agree to the terms of use.</small></p> #}
+            <hr class="my-2">
+            <div class="fw-light text-body-tertiary">You can change you Profile picture later in your Profile</div>
+            <hr class="my-2">
+    {{ form_end(registrationForm) }}
+            
+          </form>
+        </div>
+        <div class="col-lg-7 text-center text-lg-start my-3">
+          <h3 class="display-6 fw-bold lh-1 text-primary mx-2 my-3">Registration PhoneFactory</h3>
+         
+          <p class="col-lg-10 fs-5 mx-2 text-white">Discover a curated collection of the latest Smartphone models. From stunning displays that bring your content to life with <span class="fst-italic">powerful processors</span>,  that effortlessly handle multitasking.</p>   <div class="fw-light text-white mx-2 my-3">Already Signed-up, go to <a href="/login">Login</a></div>  
+        </div>
+      </div>
+    </div>
+    
+    </body>
+    
+{# <div class="container ">
+    <h1 class="my-4 text-center">Register</h1>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+    {{ form_row(registrationForm.fname) }}
+    {{ form_row(registrationForm.lname) }}
+    {{ form_row(registrationForm.email) }}
+    {{ form_row(registrationForm.plainPassword, {
+    label: 'Password'
+    }) }}
+    {{ form_row(registrationForm.agreeTerms) }}
+
+    <button type="submit" class="btn btn-warning my-3">Register</button>
+    {{ form_end(registrationForm) }}
+
+</div>
+</body> #}
+{% endblock %}

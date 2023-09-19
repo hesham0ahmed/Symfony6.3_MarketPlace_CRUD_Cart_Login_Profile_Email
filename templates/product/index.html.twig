@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product index{% endblock %}
+
+{% block body %}
+{% if is_granted("ROLE_ADMIN") %}
+
+
+
+<main>
+  <div class="position-relative overflow-hidden    text-center  bgImage">
+    <div class="col-md-6  mx-auto my-5">
+      <h1 class="display-3 fw-bold ober2">Designed for engineers</h1>
+      <h3 class="fw-normal  text-white-75 mb-3 ober1">Build anything you want with Aperture</h3>
+      <div class="d-flex gap-3 justify-content-center lead fw-normal">
+        <a class="icon-link btn btn-secondary" href="#">
+          Learn more
+
+        </a>
+        <a class="icon-link btn btn-primary" href="#">
+          Buy
+
+        </a>
+      </div>
+    </div>
+    <div class="product-device shadow-sm d-none d-md-block"></div>
+    <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+  </div>
+
+  {# <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
+    <div class="text-bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+      <div class="my-3 py-3">
+        <h2 class="display-5">Another headline</h2>
+        <p class="lead">And an even wittier subheading.</p>
+      </div>
+      <div class="bg-body-tertiary shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;">
+      </div>
+    </div>
+    <div class="bg-body-tertiary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+      <div class="my-3 p-3">
+        <h2 class="display-5">Another headline</h2>
+        <p class="lead">And an even wittier subheading.</p>
+      </div>
+      <div class="bg-dark shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;"></div>
+    </div>
+  </div> #}
+  <div class="container my-5">
+    {# <h1 class="text-center">symfony console make:crud</h1>
+    <p class="text-center">make your own CRUD with CMD in Symfony with FileUpload</p> #}
+    {#
+    <hr> #}
+    <div class="album py-5">
+      <div class="container">
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 row-cols-md-3 g-3">
+          {% for product in products %}
+          <div class="col">
+            <div class="card shadow-sm border border-0">
+
+              <img src="{{ asset('pictures/' ~ product.imageName) }}" class="w-100" alt="...">
+              <div class="card-body">
+
+                <p class="card-text">Name: <b>{{ product.name }}</b></p>
+
+
+                <p class="card-text"> Description: <b>{{ product.description }} </b></p>
+
+
+                {# <p class="card-text"> ID: <b>{{ product.id }} </b></p> #}
+
+                {# <p class="card-text"> Date: <b>{{ product.date ? product.date|date('Y-m-d ') : ''
+                    }}</b></p> #}
+
+                <p class="card-text"> Categorie: <b>{{ product.categorie }}</b></p>
+
+
+                <p class="card-text">Price: <b>{{ product.price }} $</b></p>
+
+                <p class="card-text">Status:
+                  <b class="{% if product.fkStatus.status == 'Open' %}
+                              status-open{% elseif product.fkStatus.status == 'Done' %}
+                              status-done{% elseif product.fkStatus.status == 'Pending' %}
+                              status-reserved{% elseif product.fkStatus.status == 'Reserved' %}
+                              status-sold{% elseif product.fkStatus.status == 'Sold' %}
+                              status-pending{% else %}
+                              status-default{% endif %}">
+                    {{ product.fkStatus.status }}</b>
+                </p>
+
+
+
+
+
+
+                <div class="btn-group">
+                  <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-sm btn-primary">show</a>
+                  <a href="{{ path('app_product_edit', {'id': product.id}) }}"
+                    class="btn btn-sm btn-outline-secondary">edit</a>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+
+          {% else %}
+
+          <p colspan="8">no records found</p>
+
+          {% endfor %}
+
+
+
+
+        </div><a class="btn btn-success my-3 d-flex justify-content-center" href="{{ path('app_product_new') }}">Create
+          new</a>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  {% elseif is_granted("ROLE_USER") %}
+
+  <div class="container text-center my-5">
+    <h4> You are not Logged in !</h4>
+  </div>
+  {% else %}
+  <div class="container text-center my-5">
+    <h4> You are not Logged in !</h4>
+  </div>
+  {% endif %}
+  {% endblock %}

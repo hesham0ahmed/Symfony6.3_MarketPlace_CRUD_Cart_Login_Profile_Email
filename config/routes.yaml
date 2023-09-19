@@ -1,0 +1,20 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+app_profile:
+        path: /profile
+        controller: App\Controller\UserAccessController::profile
+        methods: GET
+
+app_remove_from_cart:
+        path: '/remove-from-cart/{productId}'
+        controller: 'App\Controller\CartController::removeFromCart'
+        methods: ['GET']
+
+app_redeem_code:
+        path: /redeem-code
+        controller: 'App\Controller\CartController::redeemCode'
+        methods: ['POST']

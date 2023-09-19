@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block body %}
+<style>
+    .vich-image,
+    img {
+        margin-top: 10px;
+        display: block;
+        height: 125px;
+        width: 125px;
+        /* padding: 10px; */
+    }
+
+
+
+    .vich-image,
+    button {
+        display: inline;
+        justify-content: space-between;
+        /* padding: 10px; */
+    }
+
+    /* Style the action buttons */
+    .btn-outline-success {
+        margin-top: 20px;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+{% if is_granted("ROLE_ADMIN") %}
+<div class="container my-5">
+    <h1 class="text-center">Edit my Profile</h1>
+
+    <div class="album py-5">
+        <div class="container">
+
+            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1  d-flex justify-content-center">
+
+                <div class="col">
+                    <div class="card shadow-sm">
+
+                        <div class="card-body">
+
+                            <form action="{{ path('profile') }}" method="POST" enctype="multipart/form-data">
+
+                                {{ form_start(editForm) }}
+                                {{ form_row(editForm.fname) }}
+                                {{ form_row(editForm.lname) }}
+                                {# <div class="container">
+                                    <img src="{{ asset('pictures/' ~ app.user.imageName) }}" alt="" width="125"
+                                        height="125" class=" border border-5 border-info my-2">
+                                </div> #}
+                                <div class="imageVich" style="height:100px">
+                                    {{ form_row(editForm.imageFile) }}</div>
+                                {# {{ form_widget(form) }} #}
+                                <button class="btn btn-outline-success my-2" type="submit">{{
+                                    button_label|default('Save') }}</button>
+                                {# <button type="submit" class="btn btn-primary my-3">Save Changes</button> #}
+                                {{ form_end(editForm) }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% elseif is_granted("ROLE_USER") %}
+<div class="container my-5">
+    <h1 class="text-center">Edit my Profile</h1>
+
+    <div class="album py-5">
+        <div class="container">
+
+            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1  d-flex justify-content-center">
+
+                <div class="col">
+                    <div class="card shadow-sm">
+
+                        <div class="card-body">
+
+                            <form action="{{ path('profile') }}" method="POST" enctype="multipart/form-data">
+
+                                {{ form_start(editForm) }}
+                                {{ form_row(editForm.fname) }}
+                                {{ form_row(editForm.lname) }}
+                                {# <div class="container">
+                                    <img src="{{ asset('pictures/' ~ app.user.imageName) }}" alt="" width="125"
+                                        height="125" class=" border border-5 border-info my-2">
+                                </div> #}
+                                {{ form_row(editForm.imageFile) }}
+                                {# {{ form_widget(form) }} #}
+                                <button class="btn btn-outline-success my-2" type="submit">{{
+                                    button_label|default('Save') }}</button>
+                                {# <button type="submit" class="btn btn-primary my-3">Save Changes</button> #}
+                                {{ form_end(editForm) }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="container text-center">
+    <h3 class="my-5">You are not Logged in !</h3>
+</div>
+{% endif %}
+
+
+
+
+
+
+{% endblock %}

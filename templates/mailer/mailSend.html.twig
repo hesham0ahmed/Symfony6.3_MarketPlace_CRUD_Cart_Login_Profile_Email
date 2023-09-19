@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email Sended{% endblock %}
+
+{% block body %}
+
+
+
+
+{% if is_granted("ROLE_ADMIN") %}
+
+{% elseif is_granted("ROLE_USER") %}
+
+{% else %}
+  <div class="container text-center">
+    <h3 class="my-5">You are not Logged in !</h3>
+  </div>
+{% endif %}
+
+{% block javascripts %}
+
+    {# //  <script>
+    //      setTimeout(function () {
+    //          window.location.href = 'http://localhost:8000/';
+    //      }, 3000); // Redirect after 3 seconds (adjust as needed)
+    //  </script> #}
+     
+{% endblock %}
+
+
+{% endblock %}

@@ -1,0 +1,455 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your cart{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper {
+        margin: 1em auto;
+        max-width: 800px;
+        width: 95%;
+        font: 18px/1.5 sans-serif;
+    }
+
+    .example-wrapper code {
+        background: #F5F5F5;
+        padding: 2px 6px;
+    }
+
+    .quantity-value {
+        font-weight: 600;
+    }
+
+    /* Adjust layout classes for responsiveness */
+    .col-md-5.col-lg-4.order-md-last {
+        order: 2;
+    }
+
+    .col-md-7.col-lg-8 {
+        order: 1;
+    }
+</style>
+{# Display success flash messages #}
+{% for message in app.flashes('success') %}
+<div class="alert alert-success auto-hide">
+    {{ message }}
+</div>
+{% endfor %}
+
+{% for message in app.flashes('error') %}
+<div class="alert alert-danger auto-hide">
+    {{ message }}
+</div>
+{% endfor %}
+<div class="container my-1 mb-3">
+    <main>
+        <div class="py-5 text-center">
+
+            <h2>Checkout</h2>
+            {# USER INFO #}
+            {# <p class="lead">
+                {% if app.user %}
+            <div class=" text-center my-3 ">
+                <p class="text-center">Logged in as: <b>{{ app.user.fname }} {{ app.user.lname }}</b></p>
+                <div class="container d-flex justify-content-center">
+                    <img src="{{ asset('pictures/' ~ app.user.imageName) }}" alt="" width="95" height="95"
+                        class="rounded-circle border border-5 border-info">
+                </div>
+            </div>
+            <hr>
+            {% endif %}. #}
+            {# USER INFO #}
+            </p>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-md-5 col-lg-4 order-md-first"> {# Cart section, order-md-first will place it on the left for
+                larger screens #}
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-primary">Your cart</span>
+                    <span class="badge bg-primary rounded-pill">
+                        {% set totalQuantity = 0 %}
+                        {% for cartItem in cart %}
+                        {% set totalQuantity = totalQuantity + cartItem.quantity %}
+                        {% endfor %}
+                        {{ totalQuantity }}
+                    </span>
+                </h4>
+                <ul class="list-group mb-3">
+                    {% for cartItem in cart %}
+                    {# Your cart item code here #}
+                    <div class="grid text-center border border-2 rounded my-2 py-2">
+                        <div class="g-col-6">
+                            {% if cartItem.product.imageName is not null %}
+                            <img src="{{ vich_uploader_asset(cartItem.product, 'imageFile') }}" alt="Product Image"
+                                style="height: 40px">
+                            {% endif %}
+                            <b>{{ cartItem.product.name }}</b><br>
+                            <p class="my-2 fw-semibold">{{ cartItem.product.description }}</p>
+                            Quantity:
+                            <span class="quantity mx-2">
+                                <button class="btn btn-outline-secondary border-0 btn-sm decrease-quantity"
+                                    data-product-id="{{ cartItem.product.id }}" data-quantity="{{ cartItem.quantity }}"
+                                    {% if promoCode==true %}disabled{% endif %}>-</button>
+                                <span class="quantity-value" data-product-id="{{ cartItem.product.id }}">{{
+                                    cartItem.quantity }}</span>
+                                <button class="btn btn-outline-secondary border-0 btn-sm increase-quantity"
+                                    data-product-id="{{ cartItem.product.id }}" data-quantity="{{ cartItem.quantity }}"
+                                    {% if promoCode==true %}disabled{% endif %}>+</button>
+                            </span> pcs
+                            <br>
+                        </div>
+                        <div>
+                            <span class="fw-medium text-body-secondary">{{ cartItem.product.price }}$</span>
+                        </div>
+                        <a href="{{ path('app_remove_from_cart', {'productId': cartItem.product.id }) }}"
+                            class="btn btn-danger mx-5  my-2"><i class="bi bi-trash"></i></a>
+                    </div>
+                    {% endfor %}
+                </ul>
+                {% if promoCode == true %}
+                {# Promo code and total price here #}
+                <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
+                    <span>Original Price (USD)</span>
+                    <strong class="h5  originalTotalPrice">{{ originalTotalPrice }}$</strong>
+                    <!-- Display the original total price here -->
+                </li>
+                <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
+                    <span>Discount Code</span>
+                    <strong class="h5">{{ promoCode }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
+                    <span>Discount Percentage</span>
+                    <strong class="h5">10%</strong> <!-- Replace with the actual discount percentage if needed -->
+                </li>
+                <hr>
+                {% endif %}
+                <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
+                    <span>Total (USD)</span>
+                    <strong class="h5">
+                        {{ discountPrice }}{% if discountPrice < totalPrice %}<del class="text-muted">{{ totalPrice
+                            }}</del>{% endif %}$
+                    </strong>
+                </li>
+                <form class="card p-2" action="{{ path('app_redeem_code') }}" method="post">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Promo code" name="promo_code">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('promo_code') }}">
+                        <button type="submit" class="btn btn-secondary">Redeem</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3">Billing address</h4>
+                <form class="needs-validation" method="post">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">First name</label>
+                            <input type="text" class="form-control" id="firstName" name="checkout_form[firstName]"
+                                placeholder="" required>
+                            <div class="invalid-feedback">
+                                Valid first name is required.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="lastName" class="form-label">Last name</label>
+                            <input type="text" class="form-control" id="lastName" name="checkout_form[lastName]"
+                                placeholder="" required>
+                            <div class="invalid-feedback">
+                                Valid last name is required.
+                            </div>
+                        </div>
+
+                        <!-- Other billing address fields go here -->
+
+                        <div class="col-12">
+                            <label for="email" class="form-label">Email <span
+                                    class="text-body-secondary">(Optional)</span></label>
+                            <input type="email" class="form-control" id="email" name="checkout_form[email]"
+                                placeholder="you@example.com">
+                            <div class="invalid-feedback">
+                                Please enter a valid email address for shipping updates.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="checkout_form[address]"
+                                placeholder="1234 Main St" required>
+                            <div class="invalid-feedback">
+                                Please enter your shipping address.
+                            </div>
+                        </div>
+
+                        <!-- Other billing address fields go here -->
+
+                        <div class="col-md-5">
+                            <label for="country" class="form-label">Country</label>
+                            <select class="form-select" id="country" name="checkout_form[country]" required>
+                                <option>Austria</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid country.
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="state" class="form-label">State</label>
+                            <select class="form-select" id="state" name="checkout_form[state]" required>
+                                <option>Vienna</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid state.
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="zip" class="form-label">Zip</label>
+                            <input type="text" class="form-control" id="zip" name="checkout_form[zip]" placeholder=""
+                                required>
+                            <div class="invalid-feedback">
+                                Zip code required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="same-address">
+                        <label class="form-check-label" for="same-address">Shipping address is the same as my billing
+                            address</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="save-info">
+                        <label class="form-check-label" for="save-info">Save this information for next time</label>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h4 class="mb-3">Payment</h4>
+                    <div class="my-3">
+                        <div class="my-3">
+                            <div class="form-check">
+                                <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked
+                                    required>
+                                <label class="form-check-label" for="credit">Credit card</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
+                                <label class="form-check-label" for="debit">Debit card</label>
+                            </div>
+                            <div class="form-check">
+                                <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
+                                <label class="form-check-label" for="paypal">PayPal</label>
+                            </div>
+                        </div>
+
+                        <div class="row gy-3">
+                            <div class="col-md-6 nameCard">
+                                <label for="cc-name" class="form-label">Name on card</label>
+                                <input type="text" class="form-control" id="cc-name" placeholder="" required>
+                                <small class="text-body-secondary">Full name as displayed on card</small>
+                                <div class="invalid-feedback">
+                                    Name on card is required
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 ccNumber">
+                                <label for="cc-number" class="form-label">Credit card number</label>
+                                <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                                <div class="invalid-feedback">
+                                    Credit card number is required
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 exDate">
+                                <label for="cc-expiration" class="form-label">Expiration</label>
+                                <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                                <div class="invalid-feedback">
+                                    Expiration date required
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 ccv">
+                                <label for="cc-cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                                <div class="invalid-feedback">
+                                    Security code required
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 payPal">
+
+                                <label for="cc-cvv" class="form-label">PayPal</label>
+                                <input type="text" class="form-control" id="payPal" placeholder="" required>
+                                <small class="text-body-secondary">PayPal Account required</small>
+                                <div class="invalid-feedback">
+                                    PayPal Account required
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Other payment fields go here -->
+
+                        <hr class="my-4">
+
+                        {# <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button> #}
+                        <a href="" class="btn btn-primary btn-lg">Proceed to Payment</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </main>
+    {# <a href="{{ path('stripe_create_payment_intent') }}" class="btn btn-primary">Proceed to Payment</a> #}
+
+
+</div>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="checkout.js"></script>
+
+<script>
+    // Get references to the radio buttons and corresponding sections
+    const creditRadio = document.getElementById("credit");
+    const debitRadio = document.getElementById("debit");
+    const paypalRadio = document.getElementById("paypal");
+
+    const creditCardFields = document.querySelectorAll(".nameCard, .ccNumber, .exDate, .ccv");
+    const paypalFields = document.querySelectorAll(".payPal");
+
+    // Function to toggle the visibility of fields based on the selected payment method
+    function togglePaymentFields() {
+        if (creditRadio.checked || debitRadio.checked) {
+            // Show credit/debit card fields
+            creditCardFields.forEach(field => field.style.display = "block");
+            paypalFields.forEach(field => field.style.display = "none");
+        } else if (paypalRadio.checked) {
+            // Show PayPal fields
+            creditCardFields.forEach(field => field.style.display = "none");
+            paypalFields.forEach(field => field.style.display = "block");
+        }
+    }
+
+    // Initially, call the function to set the initial state based on the default selected payment method
+    togglePaymentFields();
+
+    // Add event listeners to the radio buttons to toggle the fields when the selection changes
+    creditRadio.addEventListener("change", togglePaymentFields);
+    debitRadio.addEventListener("change", togglePaymentFields);
+    paypalRadio.addEventListener("change", togglePaymentFields);
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+
+    // Function to update the cart item quantity
+    function updateCartItem(productId, newQuantity) {
+        // Send an AJAX request to update the cart (replace this with your actual update code)
+        fetch(`/update-cart/${productId}/${newQuantity}`, {
+            method: 'POST',
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Find the quantity element by its data-product-id attribute
+                const quantityElement = document.querySelector(`.quantity-value[data-product-id="${productId}"]`);
+
+                // Check if the element exists before updating its content
+                if (quantityElement) {
+                    quantityElement.textContent = newQuantity;
+                }
+
+                // Update the total quantity badge
+                const totalQuantityBadge = document.querySelector('.total-quantity-badge');
+                if (totalQuantityBadge) {
+                    totalQuantityBadge.textContent = data.totalQuantity;
+                }
+
+                // Update the total price
+                const totalPriceElement = document.querySelector('.total-price');
+                if (totalPriceElement) {
+                    totalPriceElement.textContent = `$${data.totalPrice}`;
+                }
+
+                const originalTotalPrice = document.querySelector('.originalTotalPrice');
+                if (originalTotalPrice) {
+                    originalTotalPrice.textContent = data.originalTotalPrice;
+                }
+
+                // Refresh the page immediately
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error updating cart:', error);
+            });
+    }
+
+
+    // Function to handle increasing quantity
+    function increaseQuantity(productId, currentQuantity, originalTotalPrice) {
+        const newQuantity = currentQuantity + 1;
+        updateCartItem(productId, newQuantity, originalTotalPrice);
+
+        // Refresh the cart immediately
+        refreshCart();
+    }
+
+    // Function to handle decreasing quantity
+    function decreaseQuantity(productId, currentQuantity, originalTotalPrice) {
+        if (currentQuantity > 1) {
+            const newQuantity = currentQuantity - 1;
+            updateCartItem(productId, newQuantity, originalTotalPrice);
+        } else {
+            // If quantity is 1, remove the product from the cart
+            removeProduct(productId);
+        }
+
+        // Refresh the cart immediately
+        refreshCart();
+    }
+
+
+
+
+    // Function to refresh the cart page
+    function refreshCart() {
+        // Reload the current page
+        window.location.reload();
+    }
+
+    // Add event listeners for the buttons
+    document.addEventListener('click', event => {
+        const target = event.target;
+        if (target.classList.contains('increase-quantity')) {
+            const productId = target.getAttribute('data-product-id');
+            const currentQuantity = parseInt(target.previousElementSibling.textContent);
+            increaseQuantity(productId, currentQuantity);
+        } else if (target.classList.contains('decrease-quantity')) {
+            const productId = target.getAttribute('data-product-id');
+            const currentQuantity = parseInt(target.nextElementSibling.textContent);
+            decreaseQuantity(productId, currentQuantity);
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Select all flash messages with the 'auto-hide' class
+        const flashMessages = document.querySelectorAll('.alert.auto-hide');
+
+        // Set the time duration in milliseconds (5000ms = 5 seconds)
+        const duration = 3000;
+
+        // Loop through each flash message
+        flashMessages.forEach(function (flashMessage) {
+            // Hide the flash message after the specified duration
+            setTimeout(function () {
+                flashMessage.style.display = 'none';
+            }, duration);
+        });
+    });
+</script>
+
+
+{% endblock %}

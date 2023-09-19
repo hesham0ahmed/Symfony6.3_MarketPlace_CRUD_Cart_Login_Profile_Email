@@ -1,0 +1,233 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Marketplace{% endblock %}
+
+{% block body %}
+<style>
+/* Style the "Show" button */
+.btn-outline-primary {
+  background-color: transparent;
+  border-color: #007bff;
+  color: #007bff;
+  border-radius: 20px;
+  padding: 7px 20px;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  /* text-transform: uppercase; */
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Style the "Add to Cart" button */
+.btn-outline-warning {
+  background-color: transparent;
+  border-color: #ffc107;
+  color: #ffc107;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  /* text-transform: uppercase; */
+}
+
+.btn-outline-warning:hover {
+  background-color: #ffc107;
+  color: #000;
+}
+
+/* Style the cart icon within the "Add to Cart" button */
+.btn-outline-warning i {
+  margin-right: 5px;
+  font-size: 1.2em;
+}
+
+/* Adjust button margins */
+.my-1 {
+  margin-top: 10px;
+}
+
+
+.btn-group-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Add more styles as needed */
+
+</style>
+
+<main>
+  <div class="position-relative overflow-hidden    text-center  bgImage">
+    <div class="col-md-6  mx-auto my-5">
+      <h1 class="display-3 fw-bold ober2">Designed for engineers</h1>
+      <h3 class="fw-normal  text-white-75 mb-3 ober1">Build anything you want with Aperture</h3>
+      <div class="d-flex gap-3 justify-content-center lead fw-normal">
+        {# <a class="icon-link btn btn-secondary" href="#">
+          Learn more
+
+        </a>
+        <a class="icon-link btn btn-primary" href="#">
+          Buy
+
+        </a> #}
+      </div>
+    </div>
+    <div class="product-device shadow-sm d-none d-md-block"></div>
+    <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+  </div>
+
+  <main class="d-flex flex-nowrap">
+    <div class="flex-shrink-0 p-3 sideBarL" style="width: 200px;">
+      <a href="/" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+        <svg class="bi pe-none me-2" width="30" height="24">
+          <use xlink:href="#bootstrap" />
+        </svg>
+        <span class="fs-6 fw-semibold">PhoneFactory</span>
+      </a>
+      <ul class="list-unstyled ps-0">
+        <li class="mb-1">
+          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed dropdown-toggle"
+            data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+            Electronics
+          </button>
+          <div class="collapse" id="home-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Smartphones</a></li>
+              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Laptops</a></li>
+              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Refurbed</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="mb-1">
+          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed dropdown-toggle"
+            data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+            Used Products
+          </button>
+          <div class="collapse" id="dashboard-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Smartphones</a></li>
+              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Tablets</a></li>
+              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Laptops</a></li>
+              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Smart Watches</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="mb-1">
+          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed dropdown-toggle"
+            data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+            My List
+          </button>
+          <div class="collapse" id="orders-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Favorite</a></li>
+              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Reserved</a></li>
+              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Buyed</a></li>
+              {# <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Returned</a></li>
+              #}
+            </ul>
+          </div>
+        </li>
+        <li class="border-top my-3"></li>
+        <li class="mb-1">
+          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed dropdown-toggle"
+            data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+            Account
+          </button>
+          <div class="collapse" id="account-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">
+              {# <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">New...</a></li>
+              #}
+              <li><a href="/profile" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Profile</a>
+              </li>
+              <li><a href="/mailer" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Send Email</a>
+              </li>
+              <li><a href="/logout" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Sign out</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    {# SIDEBAR #}
+    <div class="container my-5">
+      {# <h1 class="text-center">symfony console make:crud</h1>
+      <p class="text-center">make your own CRUD with CMD in Symfony with FileUpload</p>
+      <hr> #}
+      <div class="album py-5">
+        <div class="container">
+
+          <div class="row row-cols-1 row-cols-sm-1  row-cols-md-2 row-cols-lg-3 g-3">
+            {% for product in products %}
+            <div class="col">
+              <div class="card shadow-sm border border-0">
+
+                <a href="{{ path('app_product_show', {'id': product.id}) }}"><img
+                    src="{{ asset('pictures/' ~ product.imageName) }}" class="w-75" alt="..."></a>
+                <div class="card-body">
+
+                  <p class="card-text">Name: <b>{{ product.name }}</b></p>
+
+
+                  <p class="card-text"> Description: <b>{{ product.description }} </b></p>
+
+
+                  {# <p class="card-text"> ID: <b>{{ product.id }} </b></p> #}
+
+                  {# <p class="card-text"> Date: <b>{{ product.date ? product.date|date('Y-m-d ') : ''
+                      }}</b></p> #}
+
+                  <p class="card-text"> Categorie: <b>{{ product.categorie }}</b></p>
+
+
+                  <p class="card-text">Price: <b>{{ product.price }} $</b></p>
+
+                  {# <p class="card-text">Status:
+                    <b class="{% if product.fkStatus.status == 'Open' %}
+                                status-open{% elseif product.fkStatus.status == 'Done' %}
+                                status-done{% elseif product.fkStatus.status == 'Pending' %}
+                                status-reserved{% elseif product.fkStatus.status == 'Reserved' %}
+                                status-sold{% elseif product.fkStatus.status == 'Sold' %}
+                                status-pending{% else %}
+                                status-default{% endif %}">
+                      {{ product.fkStatus.status }}</b>
+                  </p> #}
+
+                  <div class="btn-group-2 d-grid gap-2 d-flex align-items-start">
+                    <a href="{{ path('app_product_show', {'id': product.id}) }}"
+                      class="btn btn-outline-primary">Show</a>
+                      <form action="{{ path('app_add_to_cart', {'productid': product.id, 'quantity': 1}) }}" method="post">
+                        <button type="submit" class="btn btn-outline-warning text-black my-1">
+                            <i class="bi bi-cart3 h6"></i> Add to Cart
+                        </button>
+                    </form>
+                 </div>
+                </div>
+              </div>
+            </div>
+
+            {% else %}
+
+            <p colspan="8">no records found</p>
+
+            {% endfor %}
+
+
+
+          </div>
+          {#
+          <hr> #}
+  </main>
+  </div>
+  </div>
+  </div>
+
+
+
+
+  {% endblock %}

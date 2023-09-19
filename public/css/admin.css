@@ -1,0 +1,37 @@
+.ea-edit {
+  /* make the backend contents as wide as the browser window */
+  --body-max-width: 100%;
+  /* --body-min-height: 150%; */
+
+  /* make the base font size smaller */
+  --font-size-base: 13px;
+  /* remove all border radius to make corners straight */
+  --border-radius: 0px;
+}
+
+/* .ea.ea-edit.ea-edit-Product.ea-content-width-normal.ea-sidebar-width-normal.ea-dark-scheme {
+  padding-bottom: 70px;
+} */
+
+.sidebar.logo-custom {
+  --font-size-base: 23px;
+  color: aqua;
+}
+
+.sidebar .main-header .logo-custom {
+  font-size: 18px;
+  /* color: aqua; */
+  /* background-color: brown; */
+  border-radius: 10px;
+  border-color: grey;
+  border-bottom-style: solid;
+  padding: 5px;
+  border-width: 2px;
+  text-align: center;
+}
+
+.menu .menu-item .menu-item-label {
+  font-size: 16px;
+  /* color: aqua; */
+  /* background-color: brown; */
+}

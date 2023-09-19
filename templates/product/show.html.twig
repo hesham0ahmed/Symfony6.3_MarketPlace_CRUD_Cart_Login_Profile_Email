@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+{{ product.name }} | {{ product.description }}
+{% endblock %}
+
+{% block stylesheets %}
+{#
+<link rel="stylesheet" href="{{ asset('css/product-details.css') }}"> #}
+{% endblock %}
+
+{% block body %}
+
+
+
+<div class="container mt-4">
+    {% if is_granted("ROLE_ADMIN") %}
+    <div class="card product-card">
+        <div class="card-header product-header">
+            <h1 class="text-center">{{ product.name }}</h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="product-image-container">
+                        <img src="{{ asset('pictures/' ~ product.imageName) }}" class="img-fluid product-image"
+                            alt="{{ product.name }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <table class="table product-table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Product Id</th>
+                                <td>{{ product.id }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Name</th>
+                                <td>{{ product.name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Description</th>
+                                <td>{{ product.description }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Price</th>
+                                <td class="product-price">{{ product.price }} $</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Date</th>
+                                <td>{{ product.date ? product.date|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Category</th>
+                                <td>{{ product.categorie }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Status</th>
+                                <td>
+                                    <b class="badge badge-primary product-status">
+                                        {{ product.fkStatus.status }}
+                                    </b>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="{{ path('app_product_edit', {'id': product.id}) }}"
+                        class="btn btn-warning product-edit-button">Edit</a>
+                    <a href="{{ path('app_product_index') }}" class="btn btn-secondary product-back-button">Back to
+                        List</a>
+                    {{ include('product/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elseif is_granted("ROLE_USER") %}
+    <div class="card product-card">
+        <div class="card-header product-header">
+            <h1 class="text-center">{{ product.name }}</h1>
+            <p class="d-flex justify-content-center">{{ product.description }}</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="product-image-container">
+                        <img src="{{ asset('pictures/' ~ product.imageName) }}" class="img-fluid product-image"
+                            alt="{{ product.name }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <table class="table product-table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Product Id</th>
+                                <td>{{ product.id }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Name</th>
+                                <td>{{ product.name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Description</th>
+                                <td>{{ product.description }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Date</th>
+                                <td>{{ product.date ? product.date|date('Y-m-d') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Category</th>
+                                <td>{{ product.categorie }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Status</th>
+                                <td>
+                                    <b class="badge badge-primary product-status">
+                                        {{ product.fkStatus.status }}
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Price</th>
+                                <td class="product-price">{{ product.price }} $</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-3">
+                        <a href="{{ path('app_user_access') }}" class="btn btn-secondary product-back-button mx-2">Back
+                            to List</a>
+                        <form action="{{ path('app_add_to_cart', {'productid': product.id, 'quantity': 1}) }}"
+                            method="post" class="d-inline">
+                            <button type="submit" class="btn btn-warning product-add-to-cart-button mx-2">
+                                <i class="bi bi-cart3 me-2"></i> Add to Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="container text-center my-5">
+        <h3>You are not logged in!</h3>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

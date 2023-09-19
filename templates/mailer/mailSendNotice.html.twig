@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email Sended{% endblock %}
+
+{% block body %}
+
+
+
+
+{% if is_granted("ROLE_ADMIN") %}
+<div class="container text-center">
+  <h3 class="my-5">Email Sended !</h3>
+  <p class="mb-3">You will be automatically redirected in 3 seconds.</p>
+</div>
+{% elseif is_granted("ROLE_USER") %}
+<div class="container text-center">
+  <h3 class="my-5">Email Sended !</h3>
+  <p class="mb-3">You will be automatically redirected in 3 seconds.</p>
+</div>
+{% else %}
+  <div class="container text-center">
+    <h3 class="my-5">You are not Logged in !</h3>
+  </div>
+{% endif %}
+
+{% block javascripts %}
+
+      <script>
+          setTimeout(function () {
+             window.location.href = '/mailer/mailSend';
+          }, 3000); // Redirect after 3 seconds (adjust as needed)
+     </script>
+     
+{% endblock %}
+
+
+{% endblock %}

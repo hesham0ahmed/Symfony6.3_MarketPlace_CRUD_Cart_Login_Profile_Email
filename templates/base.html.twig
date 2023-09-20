@@ -16,25 +16,25 @@
 
     {% block javascripts %}
     
-    <script>
-        let idleTimeout;
+    {# // <script>
+    //     let idleTimeout;
 
-        function resetIdleTimeout() {
-            clearTimeout(idleTimeout);
-            idleTimeout = setTimeout(logout, 150000); // Logout after 5 minutes of inactivity
-        }
+    //     function resetIdleTimeout() {
+    //         clearTimeout(idleTimeout);
+    //         idleTimeout = setTimeout(logout, 150000); // Logout after 5 minutes of inactivity
+    //     }
 
-        function logout() {
-            // Make an AJAX request to your logout route
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '{{ path("app_logout") }}', false);
-            xhr.send();
-        }
+    //     function logout() {
+    //         // Make an AJAX request to your logout route
+    //         var xhr = new XMLHttpRequest();
+    //         xhr.open('GET', '{{ path("app_logout") }}', false);
+    //         xhr.send();
+    //     }
 
-        // Detect user activity (e.g., mousemove and keydown events)
-        document.addEventListener("mousemove", resetIdleTimeout);
-        document.addEventListener("keydown", resetIdleTimeout);
-    </script>
+    //     // Detect user activity (e.g., mousemove and keydown events)
+    //     document.addEventListener("mousemove", resetIdleTimeout);
+    //     document.addEventListener("keydown", resetIdleTimeout);
+    // </script> #}
     {% endblock %}
 
     {# BOOTSTRAP #}

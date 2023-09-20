@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Entity\Product;
-use Doctrine\ORM\EntityManager;
+
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 class CartController extends AbstractController
 {
@@ -35,7 +35,6 @@ class CartController extends AbstractController
                 'quantity' => $quantity,
                 // 'image' => $product->getImage(), // Assuming you have a method like getImage() to get the image path or URL
                 'originalPrice' => $product->getPrice(), // Store the original product price
-
             ];
         }
         // Update the cart data in the session
@@ -45,8 +44,6 @@ class CartController extends AbstractController
             throw $this->createNotFoundException('Product not found');
         }
 
-        // Update the cart data in the session
-        $session->set('cart', $cart);
 
         return $this->redirectToRoute('app_cart');
     }
@@ -66,7 +63,7 @@ class CartController extends AbstractController
     #[Route('/cart', name: 'app_cart')]
     public function viewCart(SessionInterface $session, Request $request): Response
     {
-        // Retrieve the cart data from the session
+
         $cart = $session->get('cart', []);
         $session->set('cart', $cart);
 
@@ -76,9 +73,12 @@ class CartController extends AbstractController
         // Check if a discount price exists in the cart
         $discountPrice = isset($cart['totalPrice']) ? $cart['totalPrice'] : $totalPrice;
 
-        // Retrieve the original total price and promo code from the request parameters
-        $originalTotalPrice = $request->query->get('originalTotalPrice');
+        // Retrieve the original total price from the session or any other storage mechanism
+        $originalTotalPrice = $session->get('originalTotalPrice', $totalPrice);
         $promoCode = $request->query->get('promoCode');
+
+        // Retrieve the promoCode from the session or any other storage mechanism
+        $promoCode = $session->get('promoCode');
 
         return $this->render('cart/index.html.twig', [
             'cart' => $cart,
@@ -86,6 +86,8 @@ class CartController extends AbstractController
             'discountPrice' => $discountPrice,
             'originalTotalPrice' => $originalTotalPrice,
             'promoCode' => $promoCode,
+
+
         ]);
     }
     private function getCartFromSession(SessionInterface $session): array
@@ -171,7 +173,10 @@ class CartController extends AbstractController
 
                 // Update the cart data in the session
                 $this->updateCartInSession($session, $cart);
-
+                // Set the originalTotalPrice in the session
+                $session->set('originalTotalPrice', $originalTotalPrice);
+                // Set the promoCode in the session
+                $session->set('promoCode', $promoCode);
                 // Set a flag in the session to indicate that the promo code has been applied
                 $session->set('promoCodeApplied', true);
                 // Inside the redeemCode action

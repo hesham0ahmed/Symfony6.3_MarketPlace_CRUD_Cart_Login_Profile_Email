@@ -44,6 +44,7 @@
 <div class="container my-1 mb-3">
     <main>
         <div class="py-5 text-center">
+            
 
             <h2>Your Cart</h2>
             {# USER INFO #}
@@ -61,56 +62,55 @@
             {# USER INFO #}
             </p>
         </div>
-
         <div class="row g-5">
             <div class="col-md-5 col-lg-4 order-md-first">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-primary">Your cart</span>
                     <span class="badge bg-primary rounded-pill">
                         {% set totalQuantity = 0 %}
-                        {% for cartItem in cart %}
+                        {% for cartItem in cartItems[0] %}
                         {% set totalQuantity = totalQuantity + cartItem.quantity %}
                         {% endfor %}
                         {{ totalQuantity }}
                     </span>
                 </h4>
-                <ul class="list-group mb-3">
-                    {% for cartItem in cart %}
-                    {# Your cart item code here #}
-                    <div class="grid text-center border border-2 rounded my-2 py-2">
-                        <div class="g-col-6">
-                            {% if cartItem.product.imageName is not null %}
-                            <img src="{{ vich_uploader_asset(cartItem.product, 'imageFile') }}" alt="Product Image"
-                                style="height: 40px">
-                            {% endif %}
-                            <b>{{ cartItem.product.name }}</b><br>
-                            <p class="my-2 fw-semibold">{{ cartItem.product.description }}</p>
-                            Quantity:
-                            <span class="quantity mx-2">
-                                <button class="btn btn-outline-secondary border-0 btn-sm decrease-quantity"
-                                    data-product-id="{{ cartItem.product.id }}" data-quantity="{{ cartItem.quantity }}"
-                                    {% if promoCode == true %}disabled{% endif %}>-</button>
-                                <span class="quantity-value" data-product-id="{{ cartItem.product.id }}">{{
-                                    cartItem.quantity }}</span>
-                                <button class="btn btn-outline-secondary border-0 btn-sm increase-quantity"
-                                    data-product-id="{{ cartItem.product.id }}" data-quantity="{{ cartItem.quantity }}"
-                                    {% if promoCode == true %}disabled{% endif %}>+</button>
-                            </span> pcs
-                            <br>
-                        </div>
-                        <div>
-                            <span class="fw-medium text-body-secondary">{{ cartItem.product.price }}$</span>
-                        </div>
-                        <a href="{{ path('app_remove_from_cart', {'productId': cartItem.product.id }) }}"
-                            class="btn btn-danger mx-5  my-2"><i class="bi bi-trash"></i></a>
-                    </div>
+       
+                {% for cartItem in cartItems[0] %}
+                <ul class="list-group mb-1">
+                    {% for product in products %}
+                        {# Add a conditional statement to filter products based on some criteria #}
+                        {% if cartItem.fkProductId == product.id %}
+                            <div class="grid text-center border border-2 rounded my-2 py-2">
+                                <div class="g-col-6">
+                                    {# Product Picture / Name from Table Products #}
+                                    <a href="{{ path('app_product_show', {'id': product.id}) }}"><img
+                                        src="{{ asset('pictures/' ~ product.imageName) }}" class="w-25" alt="..."></a>
+                                    <p class="card-text">Name: <b>{{ product.name }}</b></p>
+                                    <p class="card-text"> Description: <b>{{ product.description }} </b></p>
+                                    Quantity:
+                                    <span class="quantity mx-2">
+                                        <a href="{{ path('app_decrease_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}" class=" mx-2"><i class="bi bi-dash"></i></a>
+                                        <!-- Display the current quantity here -->
+                                        {{ cartItem.quantity }}
+                                        <a href="{{ path('app_increase_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}" class=" mx-2"><i class="bi bi-plus"></i></a>
+                                    </span> pcs
+                                    <br>
+                                </div>
+                                <div>
+                                    <span class="fw-medium text-body-secondary">{{ cartItem.price }}$</span>
+                                </div>
+                                <a href="{{ path('app_remove_from_cart', {'productId': cartItem.id }) }}?userid={{ cartItem.fkUserId }}" class="btn btn-danger mx-5 my-2"><i class="bi bi-trash"></i></a>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </ul>
+            {% endfor %}
+            {% for cartItem in cartItems[0] %}
                 {% if promoCode == true %}
                 {# Promo code and total price here #}
                 <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
                     <span>Original Price (USD)</span>
-                    <strong class="h5  originalTotalPrice">{{ originalTotalPrice }}$</strong>
+                    <strong class="h5  originalTotalPrice">{{ cartItem.originalTotalPrice }}$</strong>
                     <!-- Display the original total price here -->
                 </li>
                 <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
@@ -122,25 +122,37 @@
                     <strong class="h5">10%</strong> <!-- Replace with the actual discount percentage if needed -->
                 </li>
                 <hr>
-                {% endif %}
-                <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
-                    <span>Total (USD)</span>
-                    <strong class="h5">
-                        {{ discountPrice }}{% if discountPrice < totalPrice %}<del class="text-muted">{{ totalPrice
-                            }}</del>{% endif %}$
-                    </strong>
-                </li>
-                <form class="card p-2" action="{{ path('app_redeem_code') }}" method="post">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Promo code" name="promo_code">
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('promo_code') }}">
-                        <button type="submit" class="btn btn-secondary">Redeem</button>
-                    </div>
-                </form>
+                {% endif %}{% endfor %}
+                {# Display the promo code form for the entire cart (outside the loop) #}
+<form class="card p-2" action="{{ path('app_redeem_code', {'userid': app.user.id}) }}" method="post">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Promo code" name="promo_code">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('promo_code') }}">
+        <button type="submit" class="btn btn-secondary">Redeem</button>
+    </div>
+</form>
+
+
+
+{# Display the total price at the end of the cart #}
+<li class="list-group-item d-flex justify-content-between mx-2 mb-2 total-price">
+    <span>Total (USD)</span>
+    <strong class="h5">
+        {{ originalTotalPrice }}
+        {# {% if discountPrice < totalPrice %}<del class="text-muted">{{ totalPrice }}</del>{% endif %} #}
+        $
+    </strong>
+</li>
+
+            
+            
+            
+                   
             </div>
+           
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Billing address</h4>
-                <form class="needs-validation" method="post" action="{{ path('app_order') }}">
+                <form class="needs-validation" method="post" action="{{ path('app_order', {'userid': app.user.id}) }}">
                     
                     <div class="row g-3">
                         <div class="col-sm-6">
@@ -297,7 +309,7 @@
                         <hr class="my-4">
 
                         {# <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button> #}
-                        <a href="{{ path('app_order') }}" class="btn btn-primary btn-lg" type="submit">Proceed to Checkout</a>
+                        <a href="{{ path('app_order', {'userid': app.user.id}) }}" class="btn btn-primary btn-lg" type="submit">Proceed to Checkout</a>
                     </div>
                 </form>
 
@@ -310,9 +322,9 @@
 </div>
 
 </form>
-<script src="https://js.stripe.com/v3/"></script>
+{# <script src="https://js.stripe.com/v3/"></script> #}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="checkout.js"></script>
+{# <script src="checkout.js"></script> #}
 
 <script>
     // Get references to the radio buttons and corresponding sections
@@ -346,110 +358,87 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-
-    // Function to update the cart item quantity
-    function updateCartItem(productId, newQuantity) {
-        // Send an AJAX request to update the cart (replace this with your actual update code)
-        fetch(`/update-cart/${productId}/${newQuantity}`, {
-            method: 'POST',
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Find the quantity element by its data-product-id attribute
-                const quantityElement = document.querySelector(`.quantity-value[data-product-id="${productId}"]`);
-
-                // Check if the element exists before updating its content
-                if (quantityElement) {
-                    quantityElement.textContent = newQuantity;
-                }
-
-                // Update the total quantity badge
-                const totalQuantityBadge = document.querySelector('.total-quantity-badge');
-                if (totalQuantityBadge) {
-                    totalQuantityBadge.textContent = data.totalQuantity;
-                }
-
-                // Update the total price
-                const totalPriceElement = document.querySelector('.total-price');
-                if (totalPriceElement) {
-                    totalPriceElement.textContent = `$${data.totalPrice}`;
-                }
-
-                const originalTotalPrice = document.querySelector('.originalTotalPrice');
-                if (originalTotalPrice) {
-                    originalTotalPrice.textContent = data.originalTotalPrice;
-                }
-
-                // Refresh the page immediately
-                window.location.reload();
-            })
-            .catch(error => {
-                console.error('Error updating cart:', error);
-            });
-    }
-
-
-    // Function to handle increasing quantity
-    function increaseQuantity(productId, currentQuantity, originalTotalPrice) {
-        const newQuantity = currentQuantity + 1;
-        updateCartItem(productId, newQuantity, originalTotalPrice);
-
-        // Refresh the cart immediately
-        refreshCart();
-    }
-
-    // Function to handle decreasing quantity
-    function decreaseQuantity(productId, currentQuantity, originalTotalPrice) {
-        if (currentQuantity > 1) {
-            const newQuantity = currentQuantity - 1;
-            updateCartItem(productId, newQuantity, originalTotalPrice);
-        } else {
-            // If quantity is 1, remove the product from the cart
-            removeProduct(productId);
-        }
-
-        // Refresh the cart immediately
-        refreshCart();
-    }
-
-
-
-
-    // Function to refresh the cart page
-    function refreshCart() {
-        // Reload the current page
-        window.location.reload();
-    }
-
-    // Add event listeners for the buttons
-    document.addEventListener('click', event => {
-        const target = event.target;
-        if (target.classList.contains('increase-quantity')) {
-            const productId = target.getAttribute('data-product-id');
-            const currentQuantity = parseInt(target.previousElementSibling.textContent);
-            increaseQuantity(productId, currentQuantity);
-        } else if (target.classList.contains('decrease-quantity')) {
-            const productId = target.getAttribute('data-product-id');
-            const currentQuantity = parseInt(target.nextElementSibling.textContent);
-            decreaseQuantity(productId, currentQuantity);
+    function increaseQuantity(productId) {
+    $.ajax({
+        type: 'POST',
+        url: '/increase-quantity/' + productId,
+        data: {},
+        success: function(response) {
+            // Update the cart UI with the updated data received in the response
+            updateCartUI(response.cart);
+        },
+        error: function(error) {
+            console.error('Error increasing quantity:', error);
         }
     });
+}
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Select all flash messages with the 'auto-hide' class
-        const flashMessages = document.querySelectorAll('.alert.auto-hide');
-
-        // Set the time duration in milliseconds (5000ms = 5 seconds)
-        const duration = 3000;
-
-        // Loop through each flash message
-        flashMessages.forEach(function (flashMessage) {
-            // Hide the flash message after the specified duration
-            setTimeout(function () {
-                flashMessage.style.display = 'none';
-            }, duration);
-        });
+function decreaseQuantity(productId) {
+    $.ajax({
+        type: 'POST',
+        url: '/decrease-quantity/' + productId,
+        data: {},
+        success: function(response) {
+            // Update the cart UI with the updated data received in the response
+            updateCartUI(response.cart);
+        },
+        error: function(error) {
+            console.error('Error decreasing quantity:', error);
+        }
     });
+}
+
+function updateCartUI(cartData) {
+      // Assuming you have elements in your HTML to display cart items, quantities, and total price
+      const cartItemsElement = document.getElementById('cart-items');
+    const totalPriceElement = document.getElementById('total-price');
+
+    // Clear the existing cart items
+    cartItemsElement.innerHTML = '';
+
+    // Iterate through the cartData and append each item to the cartItemsElement
+    cartData.forEach((cartItem) => {
+        const itemElement = document.createElement('div');
+        itemElement.textContent = `Product: ${cartItem.name}, Quantity: ${cartItem.quantity}, Price: ${cartItem.price}`;
+        cartItemsElement.appendChild(itemElement);
+    });
+
+    // Update the total price element
+    totalPriceElement.textContent = `Total Price: ${originalTotalPrice}`;
+}
+
+
+   // Add event listeners for the buttons
+document.addEventListener('click', function(event) {
+    const target = event.target;
+    if (target.classList.contains('increase-quantity')) {
+        const productId = target.getAttribute('data-product-id');
+        const currentQuantity = parseInt(target.getAttribute('data-quantity'));
+        increaseQuantity(productId, currentQuantity);
+        // Call your increaseQuantity(productId, currentQuantity) function here
+    } else if (target.classList.contains('decrease-quantity')) {
+        const productId = target.getAttribute('data-product-id');
+        const currentQuantity = parseInt(target.getAttribute('data-quantity'));
+        decreaseQuantity(productId, currentQuantity);
+        // Call your decreaseQuantity(productId, currentQuantity) function here
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Select all flash messages with the 'auto-hide' class
+    const flashMessages = document.querySelectorAll('.alert.auto-hide');
+
+    // Set the time duration in milliseconds (5000ms = 5 seconds)
+    const duration = 3000;
+
+    // Loop through each flash message
+    flashMessages.forEach(function (flashMessage) {
+        // Hide the flash message after the specified duration
+        setTimeout(function () {
+            flashMessage.style.display = 'none';
+        }, duration);
+    });
+});
 </script>
 
 

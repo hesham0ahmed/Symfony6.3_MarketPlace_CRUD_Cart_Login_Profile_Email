@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -52,6 +54,20 @@ class Product
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @ORM\OneToMany(mappedBy="product", targetEntity=ProductInCart::class, orphanRemoval=true)
+     * @ORM\JoinColumn(name="id", referencedColumnName="fk_product_id")
+     */
+    private Collection $ProductInCart;
+
+
+    public function __construct()
+    {
+        $this->ProductInCart = new ArrayCollection();
+    }
+
+
 
     public function getId(): ?int
     {
@@ -188,5 +204,35 @@ class Product
     public function getImageSize(): ?int
     {
         return $this->imageSize;
+    }
+
+    /**
+     * @return Collection<int, ProductInCart>
+     */
+    public function getProductInCart(): Collection
+    {
+        return $this->ProductInCart;
+    }
+
+    public function addProductInCart(ProductInCart $productInCart): static
+    {
+        if (!$this->ProductInCart->contains($productInCart)) {
+            $this->ProductInCart->add($productInCart);
+            $productInCart->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductInCart(ProductInCart $productInCart): static
+    {
+        if ($this->ProductInCart->removeElement($productInCart)) {
+            // set the owning side to null (unless already changed)
+            if ($productInCart->getProduct() === $this) {
+                $productInCart->setProduct(null);
+            }
+        }
+
+        return $this;
     }
 }

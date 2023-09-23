@@ -26,6 +26,8 @@ class UserCrudController extends AbstractCrudController
             yield TextField::new('fname')->setLabel('FirstName'),
             yield TextField::new('lname')->setLabel('LastName'),
             yield EmailField::new('email')->setLabel('eMail'),
+            yield TextField::new('user_address')->setLabel('Address'),
+            // yield TextField::new('user_address')->setLabel('Address'),
             yield ArrayField::new('roles')->setLabel('Role'),
             yield TextField::new('password')->hideWhenUpdating()->hideOnIndex()->setLabel('Password'),
 

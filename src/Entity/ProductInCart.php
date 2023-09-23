@@ -22,6 +22,22 @@ class ProductInCart
     #[ORM\Column]
     private ?int $price = null;
 
+    #[ORM\Column]
+    private $fkUserId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="productsInCart")
+     * @ORM\JoinColumn(name="fk_user_id", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="productInCarts")
+     * @ORM\JoinColumn(name="fk_product_id", referencedColumnName="id")
+     */
+    private $product;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -66,6 +82,32 @@ class ProductInCart
     public function setPrice(int $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getFkUserId(): ?int
+    {
+        return $this->fkUserId;
+    }
+
+    public function setFkUserId(?int $fkUserId): static
+    {
+        $this->fkUserId = $fkUserId;
+
+        return $this;
+    }
+
+
+
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Product $product): static
+    {
+        $this->product = $product;
 
         return $this;
     }

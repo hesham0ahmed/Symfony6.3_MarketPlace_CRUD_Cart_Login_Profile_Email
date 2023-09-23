@@ -15,6 +15,6 @@ app_remove_from_cart:
         methods: ['GET']
 
 app_redeem_code:
-        path: /redeem-code
+        path: '/redeem-code/{userid}'
         controller: 'App\Controller\CartController::redeemCode'
         methods: ['POST']

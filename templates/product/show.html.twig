@@ -127,7 +127,7 @@
                     <div class="text-center mt-3">
                         <a href="{{ path('app_user_access') }}" class="btn btn-secondary product-back-button mx-2">Back
                             to List</a>
-                        <form action="{{ path('app_add_to_cart', {'productid': product.id, 'quantity': 1}) }}"
+                        <form action="{{ path('app_add_to_cart', {'productid': product.id, 'quantity': 1, 'userid': app.user.id}) }}"
                             method="post" class="d-inline">
                             <button type="submit" class="btn btn-warning product-add-to-cart-button mx-2">
                                 <i class="bi bi-cart3 me-2"></i> Add to Cart

@@ -29,8 +29,10 @@ class UserAccessController extends AbstractController
     #[Route('user/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(Product $product): Response
     {
+        $user = $this->getUser();
         return $this->render('show.html.twig', [
             'product' => $product,
+            'user' => $user,
         ]);
     }
 

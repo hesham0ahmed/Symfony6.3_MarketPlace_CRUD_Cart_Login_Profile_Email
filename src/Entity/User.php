@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -36,6 +38,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     #[ORM\Column]
     private ?string $password = null;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductInCart", mappedBy="user")
+     */
+    private $productsInCart;
+
+    public function __construct()
+    {
+        $this->productsInCart = new ArrayCollection();
+    }
+
     #[ORM\Column(length: 255)]
     private ?string $fname = null;
 
@@ -59,6 +71,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     #[ORM\Column(length: 255)]
     private ?string $userAddress = null;
+
+
 
     public function getId(): ?int
     {
@@ -228,6 +242,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     public function setUserAddress(string $userAddress): static
     {
         $this->userAddress = $userAddress;
+
+        return $this;
+    }
+
+    public function getProductsInCart(): ?Collection
+    {
+        return $this->productsInCart;
+    }
+
+    public function setProductsInCart(Collection $productsInCart): static
+    {
+        $this->productsInCart = $productsInCart;
 
         return $this;
     }

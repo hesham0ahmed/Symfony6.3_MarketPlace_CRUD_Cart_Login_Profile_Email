@@ -8,13 +8,25 @@
   font-size: 18px;
   font-weight: bold;
     }
+
+    .secondbar{
+        height: 5px;
+        /* background-color: rgb(210, 29, 29); */
+        background-image: linear-gradient(rgb(98, 98, 98), rgba(228, 228, 228, 0));
+    }
+    .navbar{
+        
+    }
     /* Style the action buttons */
 
 
 </style>
 <nav class="navbar navbar-expand-lg bg-secondary border-bottom border-body" data-bs-theme="dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/login"><strong>Marketplace</strong> </a>
+        <a class="navbar-brand" href="/login">
+            <strong>Marketplace</strong>
+        </a>
+            {# <img src="/pictures/lgoa.svg" style="height: 40px;" alt="">  #}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -39,7 +51,7 @@
     href="{{ path('app_logout') }}">Logout</a>
     </div>
 <hr>
-<p class="text-center">Name: <b>{{ app.user.fname }} {{ app.user.lname }}</b></p>
+<p class="text-center"><b>{{ app.user.fname }} {{ app.user.lname }}</b><span class="material-symbols-outlined text-primary px-1" href="/login">verified</span></p>
     <div class="container d-flex justify-content-center">
     <img src="{{ asset('pictures/' ~ app.user.imageName) }}" alt="" width="95"
     height="95" class="rounded-circle border border-5 border-info">
@@ -58,20 +70,17 @@
     <button class="btn btn-warning" type="submit">Search</button>
 </form>
 
-<a class="cartButton btn btn-outline-primary border-white mx-2 d-flex align-items-center text-white" href="/cart"><i class="bi bi-cart3 me-2"></i> Cart   
-    {# {% if cart is defined %}
-    <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
-        {% set totalQuantity = 0 %}
-        {% for cartItem in cart %}
-            {% set totalQuantity = totalQuantity + cartItem.quantity %}
-        {% endfor %}
-        {{ totalQuantity }}
-    </span>
-{% endif %}  #}
+<a class="position-relative cartButton btn btn-outline-primary border-white mx-2 d-flex align-items-center text-white" href="{{ path('app_cart', {'userid': app.user.id}) }}"><i class="bi bi-cart3 me-2"></i> Cart   
+   
+    {% include '_cart_badge.html.twig' %}
+
 </a>
            
 
         </div>
     </div>
 </nav>
+<div class="secondbar">
+   
+</div>
 {# NAVBAR END #}

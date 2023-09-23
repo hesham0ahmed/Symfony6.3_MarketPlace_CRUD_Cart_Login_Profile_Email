@@ -26,7 +26,7 @@
 [![Symfony - AdminView](https://img.shields.io/badge/Symfony-Admin_View-2ea44f?logo=symfony)](https://symfony.com)
 
 
-![s5Easy](https://github.com/hesham0ahmed/Symfony6.3_MarketPlace_CRUD_Cart_Login_Profile_Email/assets/133360711/a9662d99-1cda-4395-8207-28e7308eab0f)
+![d1](https://github.com/hesham0ahmed/Symfony6.3_MarketPlace_CRUD_Cart_Login_Profile_Email/assets/133360711/6b289387-66cd-4208-a14e-5f182c7411d8)
 
 
 
@@ -47,14 +47,8 @@
 [![Symfony - UserView](https://img.shields.io/badge/Symfony-User_View-2ea44f?logo=symfony)](https://symfony.com)
 
 
-![list](https://github.com/hesham0ahmed/Symfony6.3_MarketPlace_CRUD_Cart_Login_Profile_Email/assets/133360711/8f939f51-8233-4a88-b630-0ce5d649b32d)
+![s1](https://github.com/hesham0ahmed/Symfony6.3_MarketPlace_CRUD_Cart_Login_Profile_Email/assets/133360711/a42f8ca5-d7fd-406a-bbf3-f27039c38ebd)
 
-
----
-### USER can Edit his Profile
----
-
-[![Symfony - EditProfile](https://img.shields.io/badge/Symfony-EditProfile-2ea44f?logo=symfony)](https://symfony.com)
 
 
 ---
@@ -64,7 +58,8 @@
 [![Symfony - ProductView](https://img.shields.io/badge/Symfony-ProductView-2ea44f?logo=symfony)](https://symfony.com)
 
 
-![detail](https://github.com/hesham0ahmed/Symfony6.3_MarketPlace_CRUD_Cart_Login_Profile_Email/assets/133360711/d2258c01-1bc4-4ddd-96d9-38c7c971938c)
+![s2](https://github.com/hesham0ahmed/Symfony6.3_MarketPlace_CRUD_Cart_Login_Profile_Email/assets/133360711/8fa9c81a-0c1d-4721-ad80-8be5049e2f50)
+
 
 
 ---
@@ -74,5 +69,5 @@
 [![Symfony - ProductView](https://img.shields.io/badge/Symfony-Cart-2ea44f?logo=symfony)](https://symfony.com)
 
 
-![checkout](https://github.com/hesham0ahmed/Symfony6.3_MarketPlace_CRUD_Cart_Login_Profile_Email/assets/133360711/272d66cf-4d67-4a66-bf94-d6ae1a3bd97a)
+![s3](https://github.com/hesham0ahmed/Symfony6.3_MarketPlace_CRUD_Cart_Login_Profile_Email/assets/133360711/6ec0c477-f7c1-4ae9-8953-745b7e4f4504)
 

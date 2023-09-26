@@ -320,9 +320,9 @@ class CartController extends AbstractController
 
                 // Calculate the original total price before applying the discount
                 $originalTotalPrice = $this->calculateTotalPrice($cart);
-
+                $cartItems = $entityManager->getRepository(ProductInCart::class)->findBy(['fkUserId' => $userid]);
                 // Calculate the discount for each item in the cart (10% discount on each item's price)
-                foreach ($cart as $cartItem) {
+                foreach ($cartItems as $cartItem) {
                     $itemPrice = $cartItem->getPrice();
 
                     $discount = $itemPrice * 0.1; // 10% discount for each item
@@ -341,13 +341,7 @@ class CartController extends AbstractController
 
                 // Set a flag in the session to indicate that the promo code has been applied
                 $session->set('promoCodeApplied', true);
-                $newPrice = $itemPrice - $discount;
-                // Persist the updated cart data in the database (optional)
-                foreach ($cartItem as $cartItem) {
-                    if ($promoCode == true) {
-                        $cartItem->setPrice($newPrice);
-                    }
-                }
+
                 $entityManager->persist($cartItem);
                 $entityManager->flush();
 

@@ -1,0 +1,80 @@
+<main class="d-flex flex-nowrap">
+  <div class="flex-shrink-0 p-3 sideBarL" style="width: 200px;">
+    <a href="/login" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+      <svg class="bi pe-none me-2" width="30" height="24">
+       
+      </svg>
+      <span class="fs-6 fw-semibold"></span><span>Marketplace</span>
+      <span class="material-symbols-outlined text-primary px-1" href="/login">verified</span>
+        
+    </a>
+    <ul class="list-unstyled ps-0">
+      <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed dropdown-toggle"
+          data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+          Categories
+        </button>
+        <div class="collapse" id="home-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            {% for category in categories %}
+            <li><a href="{{ path('show_category', {'categoryName': category.categorie }) }}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">{{ category.categorie }}</a></li>
+        {% endfor %}
+            {# <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Smartphones</a></li>
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Laptops</a></li>
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Refurbed</a></li> #}
+          </ul>
+        </div>
+      </li>
+      <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed dropdown-toggle"
+          data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+          Used Products
+        </button>
+        <div class="collapse" id="dashboard-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Smartphones</a></li>
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Tablets</a></li>
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Laptops</a></li>
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Smart Watches</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed dropdown-toggle"
+          data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+          My List
+        </button>
+        <div class="collapse" id="orders-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Favorite</a></li>
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Reserved</a></li>
+            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Buyed</a></li>
+            {# <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Returned</a></li>
+            #}
+          </ul>
+        </div>
+      </li>
+      <li class="border-top my-3"></li>
+      <li class="mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed dropdown-toggle"
+          data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+          Account
+        </button>
+        <div class="collapse" id="account-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ">
+            {# <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">New...</a></li>
+            #}
+            <li><a href="/profile" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Profile</a>
+            </li>
+            <li><a href="/mailer" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Send Email</a>
+            </li>
+            <li><a href="/logout" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Sign out</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  {# SIDEBAR END #}

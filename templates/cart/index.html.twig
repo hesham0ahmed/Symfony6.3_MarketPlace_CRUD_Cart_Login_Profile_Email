@@ -80,19 +80,20 @@
                     {% for product in products %}
                         {# Add a conditional statement to filter products based on some criteria #}
                         {% if cartItem.fkProductId == product.id %}
-                            <div class="grid text-center border border-2 rounded my-2 py-2">
+                            <div class="grid text-center border border-2 rounded  py-2">
                                 <div class="g-col-6">
                                     {# Product Picture / Name from Table Products #}
                                     <a href="{{ path('app_product_show', {'id': product.id}) }}"><img
                                         src="{{ asset('pictures/' ~ product.imageName) }}" class="w-25" alt="..."></a>
-                                    <p class="card-text">Name: <b>{{ product.name }}</b></p>
-                                    <p class="card-text"> Description: <b>{{ product.description }} </b></p>
+                                        
+                                    <div class="lead">Name: <b>{{ product.name }}</b></div>
+                                    <div class="small"> Description: <span class="">{{ product.description }} </span></div>
                                     Quantity:
                                     <span class="quantity mx-2">
-                                        <a href="{{ path('app_decrease_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}" class=" mx-2"><i class="bi bi-dash"></i></a>
+                                        <a href="{{ path('app_decrease_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}" class=" mx-2" id="decrease-quantity"><i class="bi bi-dash"></i></a>
                                         <!-- Display the current quantity here -->
                                         {{ cartItem.quantity }}
-                                        <a href="{{ path('app_increase_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}" class=" mx-2"><i class="bi bi-plus"></i></a>
+                                        <a href="{{ path('app_increase_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}" class=" mx-2" id="increase-quantity"><i class="bi bi-plus"></i></a>
                                     </span> pcs
                                     <br>
                                 </div>
@@ -271,7 +272,7 @@
 
                             <div class="col-md-6 ccNumber">
                                 <label for="cc-number" class="form-label">Credit card number</label>
-                                <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                                <input type="number" class="form-control" id="cc-number" placeholder="" required>
                                 <div class="invalid-feedback">
                                     Credit card number is required
                                 </div>
@@ -287,7 +288,7 @@
 
                             <div class="col-md-3 ccv">
                                 <label for="cc-cvv" class="form-label">CVV</label>
-                                <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                                <input type="number" class="form-control" id="cc-cvv" placeholder="" required>
                                 <div class="invalid-feedback">
                                     Security code required
                                 </div>
@@ -321,7 +322,7 @@
 
 </div>
 
-</form>
+
 {# <script src="https://js.stripe.com/v3/"></script> #}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 {# <script src="checkout.js"></script> #}
@@ -358,71 +359,12 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-    function increaseQuantity(productId) {
-    $.ajax({
-        type: 'POST',
-        url: '/increase-quantity/' + productId,
-        data: {},
-        success: function(response) {
-            // Update the cart UI with the updated data received in the response
-            updateCartUI(response.cart);
-        },
-        error: function(error) {
-            console.error('Error increasing quantity:', error);
-        }
-    });
-}
-
-function decreaseQuantity(productId) {
-    $.ajax({
-        type: 'POST',
-        url: '/decrease-quantity/' + productId,
-        data: {},
-        success: function(response) {
-            // Update the cart UI with the updated data received in the response
-            updateCartUI(response.cart);
-        },
-        error: function(error) {
-            console.error('Error decreasing quantity:', error);
-        }
-    });
-}
-
-function updateCartUI(cartData) {
-      // Assuming you have elements in your HTML to display cart items, quantities, and total price
-      const cartItemsElement = document.getElementById('cart-items');
-    const totalPriceElement = document.getElementById('total-price');
-
-    // Clear the existing cart items
-    cartItemsElement.innerHTML = '';
-
-    // Iterate through the cartData and append each item to the cartItemsElement
-    cartData.forEach((cartItem) => {
-        const itemElement = document.createElement('div');
-        itemElement.textContent = `Product: ${cartItem.name}, Quantity: ${cartItem.quantity}, Price: ${cartItem.price}`;
-        cartItemsElement.appendChild(itemElement);
-    });
-
-    // Update the total price element
-    totalPriceElement.textContent = `Total Price: ${originalTotalPrice}`;
-}
-
-
-   // Add event listeners for the buttons
-document.addEventListener('click', function(event) {
-    const target = event.target;
-    if (target.classList.contains('increase-quantity')) {
-        const productId = target.getAttribute('data-product-id');
-        const currentQuantity = parseInt(target.getAttribute('data-quantity'));
-        increaseQuantity(productId, currentQuantity);
-        // Call your increaseQuantity(productId, currentQuantity) function here
-    } else if (target.classList.contains('decrease-quantity')) {
-        const productId = target.getAttribute('data-product-id');
-        const currentQuantity = parseInt(target.getAttribute('data-quantity'));
-        decreaseQuantity(productId, currentQuantity);
-        // Call your decreaseQuantity(productId, currentQuantity) function here
+    window.onload = function() {
+    if(!window.location.hash) {
+        window.location = window.location + '#0';
+        window.location.reload();
     }
-});
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     // Select all flash messages with the 'auto-hide' class

@@ -17,22 +17,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserAccessController extends AbstractController
 {
     #[Route('/', name: 'app_user_access')]
-    public function index(ProductRepository $productRepo): Response
+    public function index(ProductRepository $productRepo, EntityManagerInterface $entityManager): Response
     {
         // $user = $this->getUser();
-
+        $categories = $entityManager->getRepository(Product::class)->createQueryBuilder('p')
+            ->select('DISTINCT p.categorie')
+            ->getQuery()
+            ->getResult();
         return $this->render('user_access/index.html.twig', [
-            'products' => $productRepo->findAll()
+            'products' => $productRepo->findAll(),
+            'categories' => $categories,
         ]);
     }
 
     #[Route('user/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(Product $product): Response
     {
+
         $user = $this->getUser();
         return $this->render('show.html.twig', [
             'product' => $product,
             'user' => $user,
+
         ]);
     }
 

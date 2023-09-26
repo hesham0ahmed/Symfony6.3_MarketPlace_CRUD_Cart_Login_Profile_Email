@@ -18,3 +18,9 @@ app_redeem_code:
         path: '/redeem-code/{userid}'
         controller: 'App\Controller\CartController::redeemCode'
         methods: ['POST']
+
+show_category:
+        path: /category/{categoryName}
+        controller: App\Controller\CategoryController::showCategory
+
+

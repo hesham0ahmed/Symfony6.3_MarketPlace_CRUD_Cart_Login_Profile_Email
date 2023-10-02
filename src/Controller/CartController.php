@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Entity\Product;
 use App\Entity\ProductInCart;
 use App\Entity\User;
+use App\Form\CheckoutType;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\EntityResult;
@@ -295,6 +296,8 @@ class CartController extends AbstractController
     {
         $session->set('cart', $cart);
     }
+
+
 
     /**
      * @Route("/redeem-code/{userid}", name="app_redeem_code" )

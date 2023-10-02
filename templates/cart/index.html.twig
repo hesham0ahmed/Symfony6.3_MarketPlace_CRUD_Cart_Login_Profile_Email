@@ -44,7 +44,7 @@
 <div class="container my-1 mb-3">
     <main>
         <div class="py-5 text-center">
-            
+
 
             <h2>Your Cart</h2>
             {# USER INFO #}
@@ -74,39 +74,42 @@
                         {{ totalQuantity }}
                     </span>
                 </h4>
-       
+
                 {% for cartItem in cartItems[0] %}
                 <ul class="list-group mb-1">
                     {% for product in products %}
-                        {# Add a conditional statement to filter products based on some criteria #}
-                        {% if cartItem.fkProductId == product.id %}
-                            <div class="grid text-center border border-2 rounded  py-2">
-                                <div class="g-col-6">
-                                    {# Product Picture / Name from Table Products #}
-                                    <a href="{{ path('app_product_show', {'id': product.id}) }}"><img
-                                        src="{{ asset('pictures/' ~ product.imageName) }}" class="w-25" alt="..."></a>
-                                        
-                                    <div class="lead">Name: <b>{{ product.name }}</b></div>
-                                    <div class="small"> Description: <span class="">{{ product.description }} </span></div>
-                                    Quantity:
-                                    <span class="quantity mx-2">
-                                        <a href="{{ path('app_decrease_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}" class=" mx-2" id="decrease-quantity"><i class="bi bi-dash"></i></a>
-                                        <!-- Display the current quantity here -->
-                                        {{ cartItem.quantity }}
-                                        <a href="{{ path('app_increase_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}" class=" mx-2" id="increase-quantity"><i class="bi bi-plus"></i></a>
-                                    </span> pcs
-                                    <br>
-                                </div>
-                                <div>
-                                    <span class="fw-medium text-body-secondary">{{ cartItem.price }}$</span>
-                                </div>
-                                <a href="{{ path('app_remove_from_cart', {'productId': cartItem.id }) }}?userid={{ cartItem.fkUserId }}" class="btn btn-danger mx-5 my-2"><i class="bi bi-trash"></i></a>
-                            </div>
-                        {% endif %}
+                    {# Add a conditional statement to filter products based on some criteria #}
+                    {% if cartItem.fkProductId == product.id %}
+                    <div class="grid text-center border border-2 rounded  py-2">
+                        <div class="g-col-6">
+                            {# Product Picture / Name from Table Products #}
+                            <a href="{{ path('app_product_show', {'id': product.id}) }}"><img
+                                    src="{{ asset('pictures/' ~ product.imageName) }}" class="w-25" alt="..."></a>
+
+                            <div class="lead">Name: <b>{{ product.name }}</b></div>
+                            <div class="small"> Description: <span class="">{{ product.description }} </span></div>
+                            Quantity:
+                            <span class="quantity mx-2">
+                                <a href="{{ path('app_decrease_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}"
+                                    class=" mx-2" id="decrease-quantity"><i class="bi bi-dash"></i></a>
+                                <!-- Display the current quantity here -->
+                                {{ cartItem.quantity }}
+                                <a href="{{ path('app_increase_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}"
+                                    class=" mx-2" id="increase-quantity"><i class="bi bi-plus"></i></a>
+                            </span> pcs
+                            <br>
+                        </div>
+                        <div>
+                            <span class="fw-medium text-body-secondary">{{ cartItem.price }}$</span>
+                        </div>
+                        <a href="{{ path('app_remove_from_cart', {'productId': cartItem.id }) }}?userid={{ cartItem.fkUserId }}"
+                            class="btn btn-danger mx-5 my-2"><i class="bi bi-trash"></i></a>
+                    </div>
+                    {% endif %}
                     {% endfor %}
                 </ul>
-            {% endfor %}
-            {% for cartItem in cartItems[0] %}
+                {% endfor %}
+                {% for cartItem in cartItems[0] %}
                 {% if promoCode == true %}
                 {# Promo code and total price here #}
                 <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
@@ -125,41 +128,42 @@
                 <hr>
                 {% endif %}{% endfor %}
                 {# Display the promo code form for the entire cart (outside the loop) #}
-<form class="card p-2" action="{{ path('app_redeem_code', {'userid': app.user.id}) }}" method="post">
-    <div class="input-group">
-        <input type="text" class="form-control" placeholder="Promo code" name="promo_code">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('promo_code') }}">
-        <button type="submit" class="btn btn-secondary">Redeem</button>
-    </div>
-</form>
+                <form class="card p-2" action="{{ path('app_redeem_code', {'userid': app.user.id}) }}" method="post">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Promo code" name="promo_code">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('promo_code') }}">
+                        <button type="submit" class="btn btn-secondary">Redeem</button>
+                    </div>
+                </form>
 
 
 
-{# Display the total price at the end of the cart #}
-<li class="list-group-item d-flex justify-content-between mx-2 mb-2 total-price">
-    <span>Total (USD)</span>
-    <strong class="h5">
-        {{ originalTotalPrice }}
-        {# {% if discountPrice < totalPrice %}<del class="text-muted">{{ totalPrice }}</del>{% endif %} #}
-        $
-    </strong>
-</li>
+                {# Display the total price at the end of the cart #}
+                <li class="list-group-item d-flex justify-content-between mx-2 mb-2 total-price">
+                    <span>Total (USD)</span>
+                    <strong class="h5">
+                        {{ originalTotalPrice }}
+                        {# {% if discountPrice < totalPrice %}<del class="text-muted">{{ totalPrice }}</del>{% endif %}
+                            #}
+                            $
+                    </strong>
+                </li>
 
-            
-            
-            
-                   
+
+
+
+
             </div>
-            {{ form(form) }}
+
             <div class="col-md-7 col-lg-8">
                 <h4 class="mb-3">Billing address</h4>
                 <form class="needs-validation" method="post" action="{{ path('app_order', {'userid': app.user.id}) }}">
-                    
+
                     <div class="row g-3">
                         <div class="col-sm-6">
                             <label for="firstName" class="form-label">First name</label>
-                            <input type="text" class="form-control" id="firstName" name="firstName"
-                            placeholder="" required value="{{ firstName ?? '' }}">
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder=""
+                                required value="{{ firstName ?? '' }}">
 
                             <div class="invalid-feedback">
                                 Valid first name is required.
@@ -310,7 +314,8 @@
                         <hr class="my-4">
 
                         {# <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button> #}
-                        <a href="{{ path('app_order', {'userid': app.user.id}) }}" class="btn btn-primary btn-lg" type="submit">Proceed to Checkout</a>
+                        <a href="{{ path('app_order', {'userid': app.user.id}) }}" class="btn btn-primary btn-lg"
+                            type="submit">Proceed to Checkout</a>
                     </div>
                 </form>
 
@@ -323,9 +328,11 @@
 </div>
 
 
-{# <script src="https://js.stripe.com/v3/"></script> #}
+{#
+<script src="https://js.stripe.com/v3/"></script> #}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-{# <script src="checkout.js"></script> #}
+{#
+<script src="checkout.js"></script> #}
 
 <script>
     // Get references to the radio buttons and corresponding sections
@@ -359,28 +366,28 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-    window.onload = function() {
-    if(!window.location.hash) {
-        window.location = window.location + '#0';
-        window.location.reload();
+    window.onload = function () {
+        if (!window.location.hash) {
+            window.location = window.location + '#0';
+            window.location.reload();
+        }
     }
-}
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Select all flash messages with the 'auto-hide' class
-    const flashMessages = document.querySelectorAll('.alert.auto-hide');
+    document.addEventListener('DOMContentLoaded', function () {
+        // Select all flash messages with the 'auto-hide' class
+        const flashMessages = document.querySelectorAll('.alert.auto-hide');
 
-    // Set the time duration in milliseconds (5000ms = 5 seconds)
-    const duration = 3000;
+        // Set the time duration in milliseconds (5000ms = 5 seconds)
+        const duration = 3000;
 
-    // Loop through each flash message
-    flashMessages.forEach(function (flashMessage) {
-        // Hide the flash message after the specified duration
-        setTimeout(function () {
-            flashMessage.style.display = 'none';
-        }, duration);
+        // Loop through each flash message
+        flashMessages.forEach(function (flashMessage) {
+            // Hide the flash message after the specified duration
+            setTimeout(function () {
+                flashMessage.style.display = 'none';
+            }, duration);
+        });
     });
-});
 </script>
 
 

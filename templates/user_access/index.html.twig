@@ -97,13 +97,39 @@
 
    
     <div class="container my-1">
+      <div class="conti d-flex">
+      <button class="viewProd btn btn-outline-secondary me-3"><i class="bi bi-view-list"></i></button>
       <h3 class="text-center featProducts">Featured Products</h3>
-      {# <hr> #}
+      </div>
       
       <div class="album py-2">
         <div class="container">
 
-          <div class="row row-cols-1 row-cols-sm-1  row-cols-md-2 row-cols-lg-3 g-3">
+          
+        
+ <script>
+  $(document).ready(function() {
+    $(".viewProd").click(function() {
+      var currentClass = $(".viewPort").attr("class");
+      var newClass = "";
+
+      if (currentClass.includes("row-cols-lg-3")) {
+        newClass = currentClass.replace("row-cols-lg-3", "row-cols-lg-4");
+      } else if (currentClass.includes("row-cols-lg-4")) {
+        newClass = currentClass.replace("row-cols-lg-4", "row-cols-lg-5");
+      } else if (currentClass.includes("row-cols-lg-5")) {
+        newClass = currentClass.replace("row-cols-lg-5", "row-cols-lg-3");
+      } else {
+        newClass = currentClass + " row-cols-lg-3";
+      }
+
+      $(".viewPort").attr("class", newClass);
+    });
+  });
+</script>
+
+
+          <div class="row row-cols-1 row-cols-sm-1  row-cols-md-2 row-cols-lg-3 g-3 viewPort">
             {% for product in products %}
             <div class="col">
               <div class="card shadow-sm border border-0 h-100">

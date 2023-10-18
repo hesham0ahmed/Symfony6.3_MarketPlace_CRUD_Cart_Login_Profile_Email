@@ -162,12 +162,25 @@
                     
                     <hr class="my-4">
                 {# <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button> #}
-                <a href="/order" class="btn btn-primary btn-lg">Proceed to Payment</a>
+                <a href="/order" class="btn btn-primary btn-lg" id="">Proceed to Payment</a>
             </div></div>
         </form>
-
-   
-
+        <div id="express-checkout-element">
+            <!-- Express Checkout Element will be inserted here -->
+          </div>
+          <div id="error-message">
+            <!-- Display error message to your customers here -->
+          </div>
+          
+         <script>
+          const stripe = require('stripe')('sk_test_TyMeY76Ef4pXsM1rA5rznKax');
+          
+          const paymentIntent = await stripe.paymentIntents.create({
+            amount: 500,
+            currency: 'gbp',
+            payment_method: 'pm_card_visa',
+          });</script>
+<script src="https://js.stripe.com/v3/"></script>
        
 </div></div></main> </div>
 

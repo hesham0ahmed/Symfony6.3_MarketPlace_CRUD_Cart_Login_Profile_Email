@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block body %}
+<style>
+    .quantity-value {
+        font-weight: 600;
+    }
+
+    /* Adjust layout classes for responsiveness */
+    .col-md-5.col-lg-4.order-md-last {
+        order: 2;
+
+    }
+
+    .col-md-7.col-lg-8 {
+        order: 1;
+    }
+</style>
+<div class="container my-1 mb-3">
+    <main>
+        
+
+
+
+
+
+                    <hr class="my-4">
+
+                    <h4 class="mb-3 text-center">Success Payment</h4>
+                    <div class="my-3">
+                        <div class="my-3">
+
+                            <hr class="my-4">
+                          
+                            <div id="express-checkout-element">
+                                <!-- Express Checkout Element will be inserted here by Stripe -->
+                            </div>
+                            
+                            {# <form id="payment-form" method="post">
+                                <input type="hidden" name="clientSecret" value="{{ clientSecret }}">
+                                <button id="proceed-to-payment" class="btn btn-primary btn-lg">Proceed to Payment</button>
+                            </form> #}
+                            
+                            <div id="error-message">
+                                <!-- Display error message to your customers here -->
+                            </div>
+                                               {# <a href="/order" class="btn btn-primary btn-lg" id="">Proceed to Payment</a> #}
+                        </div>
+                    </div>
+       
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    {% for message in app.flashes('success') %}
+                                        <div 
+                                            style="color: green;
+                                                border: 2px green solid;
+                                                text-align: center;
+                                                padding: 5px;margin-bottom: 10px;">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+              
+                                    <form id="checkout-form" method="post" action="{{ path('app_stripe_charge') }}">             
+                                        <input type="hidden" name="stripeToken" id="stripe-token-id">                              
+                                        <label for="card-element" class="mb-5">Checkout</label>
+                                        <br>
+                                        <p>Please check your Email, we sended you the Billing Information</p>
+                                        {# <div id="card-element" class="form-control" ></div> #}
+                                        {# <button 
+                                            id="pay-btn"
+                                            class="btn btn-success mt-3"
+                                            type="button"
+                                            style="margin-top: 20px; width: 100%;padding: 7px;"
+                                            onclick="createToken()">PAY $5
+                                        </button> #}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+    <script src="https://js.stripe.com/v3/" ></script>
+    <script>
+        var stripe = Stripe("{{stripe_key}}");
+        var elements = stripe.elements();
+        var cardElement = elements.create('card');
+        cardElement.mount('#card-element');
+     
+        function createToken() {
+            document.getElementById("pay-btn").disabled = true;
+            stripe.createToken(cardElement).then(function(result) {
+     
+                     
+                if(typeof result.error != 'undefined') {
+                    document.getElementById("pay-btn").disabled = false;
+                    alert(result.error.message);
+                }
+     
+                // creating token success
+                if(typeof result.token != 'undefined') {
+                    document.getElementById("stripe-token-id").value = result.token.id;
+                    document.getElementById('checkout-form').submit();
+                }
+            });
+        }
+    </script>
+
+        </div>
+</div>
+</main>
+</div>
+
+{% endblock %}
+

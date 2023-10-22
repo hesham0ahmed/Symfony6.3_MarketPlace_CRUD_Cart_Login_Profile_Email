@@ -4,6 +4,11 @@
 
 {% block body %}
 <style>
+    .container {
+        /* background-color: red; */
+        min-height: 30vh;
+    }
+
     .example-wrapper {
         margin: 1em auto;
         max-width: 800px;
@@ -29,17 +34,18 @@
         order: 1;
     }
 
-    .stickytop{
-        position: fixed;
-  top: 80px;
-  right:  10px;
-}
-@media screen and (max-width: 767px) {
     .stickytop {
-     position: relative;
-     margin-bottom: 80px;
-   }
- }
+        position: fixed;
+        top: 80px;
+        right: 10px;
+    }
+
+    @media screen and (max-width: 767px) {
+        .stickytop {
+            position: relative;
+            margin-bottom: 80px;
+        }
+    }
 </style>
 {# Display success flash messages #}
 {% for message in app.flashes('success') %}
@@ -105,7 +111,7 @@
                                 <a href="{{ path('app_decrease_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}"
                                     class=" mx-2" id="decrease-quantity"><i class="bi bi-dash"></i></a>
                                 <!-- Display the current quantity here -->
-                               <strong class="h4">{{ cartItem.quantity }}</strong> 
+                                <strong class="h4">{{ cartItem.quantity }}</strong>
                                 <a href="{{ path('app_increase_quantity', {'fkProductId': cartItem.fkProductId }) }}?userid={{ cartItem.fkUserId }}"
                                     class=" mx-2" id="increase-quantity"><i class="bi bi-plus"></i></a>
                             </span> pcs
@@ -121,65 +127,68 @@
                     {% endfor %}
                 </ul>
                 {% endfor %}
-               
+
 
 
 
 
 
             </div>
-          
+
             <div class="col-md-7 col-lg-6 text-center stickytop">
-                <h5 class="my-3">Redeem code</h5><p>
+                <h5 class="my-3">Redeem code</h5>
+                <p>
                     Enter your code below to redeem your game or discount. It will be added to your account.</p>
                 <div class="borderdiv  position-relative  ">
-                        <!-- Other payment fields go here -->
-                        {% for cartItem in cartItems[0] %}
-                        {% if promoCode == true %}
-                        {# Promo code and total price here #}
-                        <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
-                            <span>Original Price (USD)</span>
-                            <strong class="h5  originalTotalPrice">{{ cartItem.originalTotalPrice }}$</strong>
-                            <!-- Display the original total price here -->
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
-                            <span>Discount Code</span>
-                            <strong class="h5">{{ promoCode }}</strong>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
-                            <span>Discount Percentage</span>
-                            <strong class="h5">10%</strong> <!-- Replace with the actual discount percentage if needed -->
-                        </li>
-                        <hr>
-                        {% endif %}{% endfor %}
-                        {# Display the promo code form for the entire cart (outside the loop) #}
-                        <form class="card p-2  my-3" action="{{ path('app_redeem_code', {'userid': app.user.id}) }}" method="post">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Promo code" name="promo_code">
-                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('promo_code') }}">
-                                <button type="submit" class="btn btn-secondary">Redeem</button>
-                            </div>
-                        </form>
-        
-        
-        
-                        {# Display the total price at the end of the cart #}
-                        <li class="list-group-item d-flex justify-content-between mx-2 mb-2 total-price">
-                            <span>Total (USD)</span>
-                            <strong class="h5">
-                                {{ originalTotalPrice }}
-                                {# {% if discountPrice < totalPrice %}<del class="text-muted">{{ totalPrice }}</del>{% endif %}
-                                    #}
-                                    $
-                            </strong>
-                        </li>
-                        <hr class="my-4">
+                    <!-- Other payment fields go here -->
+                    {% for cartItem in cartItems[0] %}
+                    {% if promoCode == true %}
+                    {# Promo code and total price here #}
+                    <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
+                        <span>Original Price (USD)</span>
+                        <strong class="h5  originalTotalPrice">{{ cartItem.originalTotalPrice }}$</strong>
+                        <!-- Display the original total price here -->
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
+                        <span>Discount Code</span>
+                        <strong class="h5">{{ promoCode }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between mx-2 mb-2">
+                        <span>Discount Percentage</span>
+                        <strong class="h5">10%</strong> <!-- Replace with the actual discount percentage if needed -->
+                    </li>
+                    <hr>
+                    {% endif %}{% endfor %}
+                    {# Display the promo code form for the entire cart (outside the loop) #}
+                    <form class="card p-2  my-3" action="{{ path('app_redeem_code', {'userid': app.user.id}) }}"
+                        method="post">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Promo code" name="promo_code">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('promo_code') }}">
+                            <button type="submit" class="btn btn-secondary">Redeem</button>
+                        </div>
+                    </form>
 
-                        {# <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button> #}
-                        <a href="{{ path('app_order', {'userid': app.user.id}) }}" class="btn btn-primary btn-lg"
-                            type="submit">Proceed to Checkout</a>
-                    </div>
-             
+
+
+                    {# Display the total price at the end of the cart #}
+                    <li class="list-group-item d-flex justify-content-between mx-2 mb-2 total-price">
+                        <span>Total (USD)</span>
+                        <strong class="h5">
+                            {{ originalTotalPrice }}
+                            {# {% if discountPrice < totalPrice %}<del class="text-muted">{{ totalPrice }}</del>{% endif
+                                %}
+                                #}
+                                $
+                        </strong>
+                    </li>
+                    <hr class="my-4">
+
+                    {# <button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button> #}
+                    <a href="{{ path('app_order', {'userid': app.user.id}) }}" class="btn btn-primary btn-lg"
+                        type="submit">Proceed to Checkout</a>
+                </div>
+
 
             </div>
         </div>

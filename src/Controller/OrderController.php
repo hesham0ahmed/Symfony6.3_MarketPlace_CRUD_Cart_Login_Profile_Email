@@ -7,6 +7,8 @@ use App\Entity\ProductInCart;
 use App\Entity\User;
 use App\Form\CheckoutType;
 use Doctrine\ORM\EntityManagerInterface;
+use Stripe\Charge;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,8 +22,9 @@ class OrderController extends AbstractController
     public function index(
         EntityManagerInterface $entityManager,
         Request $request,
-        SessionInterface $session,
+        SessionInterface $session
     ): Response {
+
         // Get the userid from the query parameters
         $userid = $request->attributes->get('userid');
         $cart = $session->get('cart', []);
@@ -46,7 +49,28 @@ class OrderController extends AbstractController
         $promoCode = $request->query->get('promoCode');
         $fkUserId = $userid;
         $cartItemsWithDetails = [$cartItems !== null ? $cartItems : []];
-        $session->set('cart', $cartItems);
+
+        // Set your Stripe API key (replace with your actual Stripe API key)
+        \Stripe\Stripe::setApiKey('sk_test_51NqzFzGR0qiHEMczUfzPtMDasaxfuRHwVzpmDH52nou7i04binIIbgK7D7Ia8m1rz6hSguvnqd2Ni6uoERhpLgWk00IOD3fyWE'); // Add your Stripe Secret Key here
+
+        $clientSecret = null; // Initialize the $clientSecret variable
+        // Set the total price in the session
+        $session->set('totalPrice', $totalPrice);
+        $session->set('fkUserId', $userid);
+        if ($request->isMethod('POST')) {
+            // Create a PaymentIntent with your own price
+            $amount = $totalPrice * 100; // Replace with your desired amount in cents
+            $currency = 'usd';
+
+            $intent = \Stripe\PaymentIntent::create([
+                'amount' => $amount,
+                'currency' => $currency,
+            ]);
+
+            // Pass the client secret to your template
+            $clientSecret = $intent->client_secret;
+        }
+
         return $this->render('order/index.html.twig', [
             'products' => $products,
             'cartItems' => $cartItemsWithDetails,
@@ -55,13 +79,35 @@ class OrderController extends AbstractController
             'promoCode' => $promoCode,
             'fkUserId' => $fkUserId,
             'discountPrice' => $discountPrice,
-        ]);
-        return $this->render('components/navbar.html.twig', [
-            'cartItems' => $cartItems,
+            'clientSecret' => $clientSecret, // Add the client secret to your template
+            'stripe_key' => $_ENV["STRIPE_KEY"],
         ]);
     }
 
 
+    #[Route('/stripe/create-charge', name: 'app_stripe_charge', methods: ['POST'])]
+    public function createCharge(Request $request, EntityManagerInterface $entityManager, SessionInterface $session)
+    {
+        \Stripe\Stripe::setApiKey($_ENV["STRIPE_SECRET"]);
+
+        // Retrieve the total price from the session
+        $totalPrice = $session->get('totalPrice');
+        $userid = $session->get('fkUserId');
+
+        \Stripe\Charge::create([
+            "amount" => $totalPrice * 100, // You may need to adjust this amount
+            "currency" => "usd",
+            "source" => $request->request->get('stripeToken'),
+            "description" => $userid,
+        ]);
+
+        $this->addFlash(
+            'success',
+            'Payment Successful!'
+        );
+
+        return $this->redirectToRoute('app_stripe', [], Response::HTTP_SEE_OTHER);
+    }
 
 
 
